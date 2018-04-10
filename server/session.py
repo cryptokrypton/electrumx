@@ -588,6 +588,8 @@ class PacElectrumX(ElectrumX):
         self.electrumx_handlers.update({
             'masternode.announce.broadcast': mna_broadcast,
             'masternode.subscribe': self.masternode_subscribe,
+            'masternode.list': self.masternode_list,
+            'masternode.info': self.masternode_info,
         })
 
     def notify(self, height, touched):
@@ -634,3 +636,14 @@ class PacElectrumX(ElectrumX):
             self.mns.add(vin)
             return result.get(vin)
         return None 
+
+    async def masternode_list(self):
+        '''Returns the list of masternodes.'''
+        result = await self.daemon.masternode_list(['full'])
+        return result 
+
+    async def masternode_info(self, vin):
+        '''Returns the full info of masternode.'''
+        result = await self.daemon.masternode_list(['full', vin])
+        #ToDo: Get and add total regards to the result
+        return result 
